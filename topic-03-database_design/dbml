@@ -36,3 +36,68 @@
 
 
 // Вставте ваш DBML-код нижче 👇
+
+// Софія Гребенюк — Member, Membership, MembershipType, MembershipStatus, Attendance, Goals, PersonalProgress, MemberExperience
+// --- MVP ТАБЛИЦІ (Базовий функціонал) ---
+Table Member  {
+  id integer [pk]
+  name varchar
+  surname varchar
+  experience_id integer // Рівень підготовки (новачок/профі)
+}
+
+Table Membership  {
+  id integer [pk]
+  member_id integer
+  type_id integer
+  status_id integer // СТАТУС КАРТКИ: активний, заморожений, закінчився
+  start_date date
+  end_date date
+}
+
+Table MembershipType {
+  id integer [pk]
+  name varchar // Щомісячний, Річний, Преміум
+}
+
+Table MembershipStatus {
+  id integer [pk]
+  name varchar //  активний, заморожений, закінчився
+}
+
+Table Attendance  {
+  id integer [pk]
+  member_id integer
+  date date
+  time time
+}
+
+// --- ФІНАЛЬНА ВЕРСІЯ (Розширений функціонал / Трекінг) ---
+Table MemberExperience  {
+  id integer [pk]
+  level varchar // Новачок, Досвідчений, Професіонал
+}
+
+Table Goals {
+  id integer [pk]
+  member_id integer
+  goal_description varchar
+  target_date date
+}
+
+Table PersonalProgress  {
+  id integer [pk]
+  member_id integer
+  metrics varchar
+  date date
+}
+
+// --- ЗВ'язки ---
+Ref: Member.experience_id > MemberExperience.id
+Ref: Membership.member_id > Member.id
+Ref: Membership.type_id > MembershipType.id
+Ref: Membership.status_id > MembershipStatus.id 
+Ref: Attendance.member_id > Member.id
+Ref: Goals.member_id > Member.id
+Ref: PersonalProgress.member_id > Member.id
+
