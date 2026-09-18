@@ -33,6 +33,56 @@
 //
 //  Повна документація: https://dbml.dbdiagram.io/docs/
 // ══════════════════════════════════════════════════════════════════
+// Sofia Hrebeniuk — Member Module ER Diagram (Member, MemberStatus, Attendance, MemberExperience, Goals, PersonalProgress)
+// --- MVP TABLES ---
+
+Table Member {
+  id integer [pk]
+  name varchar
+  surname varchar
+  experience_id integer
+  status_id integer
+}
+
+Table MemberStatus {
+  id integer [pk]
+  name varchar // active, on pause, etc.
+}
+
+Table Attendance {
+  id integer [pk]
+  member_id integer
+  date date
+  time time
+}
+
+// --- EXTENDED TABLES / TRACKING ---
+
+Table MemberExperience {
+  id integer [pk]
+  level varchar // newbie, experienced, professional
+}
+
+Table Goals {
+  id integer [pk]
+  member_id integer
+  goal_description varchar
+  target_date date
+}
+
+Table PersonalProgress {
+  id integer [pk]
+  member_id integer
+  metrics varchar
+  date date
+}
+
+// --- RELATIONS ---
+Ref: Member.experience_id > MemberExperience.id
+Ref: Member.status_id > MemberStatus.id
+Ref: Attendance.member_id > Member.id
+Ref: Goals.member_id > Member.id
+Ref: PersonalProgress.member_id > Member.id
 
 
-// Вставте ваш DBML-код нижче 👇
+
