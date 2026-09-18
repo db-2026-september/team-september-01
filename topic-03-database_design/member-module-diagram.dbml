@@ -33,49 +33,34 @@
 //
 //  Повна документація: https://dbml.dbdiagram.io/docs/
 // ══════════════════════════════════════════════════════════════════
+// Sofia Hrebeniuk — Member Module ER Diagram (Member, MemberStatus, Attendance, MemberExperience, Goals, PersonalProgress)
+// --- MVP TABLES ---
 
-
-
-
-// Софія Гребенюк — Member, Membership, MembershipType, MembershipStatus, Attendance, Goals, PersonalProgress, MemberExperience
-// --- MVP ТАБЛИЦІ (Базовий функціонал) ---
-Table Member  {
+Table Member {
   id integer [pk]
   name varchar
   surname varchar
-  experience_id integer // Рівень підготовки (новачок/профі)
+  experience_id integer
+  status_id integer
 }
 
-Table Membership  {
+Table MemberStatus {
   id integer [pk]
-  member_id integer
-  type_id integer
-  status_id integer // СТАТУС КАРТКИ: активний, заморожений, закінчився
-  start_date date
-  end_date date
+  name varchar // active, on pause, etc.
 }
 
-Table MembershipType {
-  id integer [pk]
-  name varchar // Щомісячний, Річний, Преміум
-}
-
-Table MembershipStatus {
-  id integer [pk]
-  name varchar //  активний, заморожений, закінчився
-}
-
-Table Attendance  {
+Table Attendance {
   id integer [pk]
   member_id integer
   date date
   time time
 }
 
-// --- ФІНАЛЬНА ВЕРСІЯ (Розширений функціонал / Трекінг) ---
-Table MemberExperience  {
+// --- EXTENDED TABLES / TRACKING ---
+
+Table MemberExperience {
   id integer [pk]
-  level varchar // Новачок, Досвідчений, Професіонал
+  level varchar // newbie, experienced, professional
 }
 
 Table Goals {
@@ -85,19 +70,19 @@ Table Goals {
   target_date date
 }
 
-Table PersonalProgress  {
+Table PersonalProgress {
   id integer [pk]
   member_id integer
   metrics varchar
   date date
 }
 
-// --- ЗВ'язки ---
+// --- RELATIONS ---
 Ref: Member.experience_id > MemberExperience.id
-Ref: Membership.member_id > Member.id
-Ref: Membership.type_id > MembershipType.id
-Ref: Membership.status_id > MembershipStatus.id
+Ref: Member.status_id > MemberStatus.id
 Ref: Attendance.member_id > Member.id
 Ref: Goals.member_id > Member.id
 Ref: PersonalProgress.member_id > Member.id
+
+
 
