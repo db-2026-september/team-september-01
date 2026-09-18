@@ -35,7 +35,7 @@
 // ══════════════════════════════════════════════════════════════════
 
 
-// Вставте ваш DBML-код нижче 👇
+
 
 // Софія Гребенюк — Member, Membership, MembershipType, MembershipStatus, Attendance, Goals, PersonalProgress, MemberExperience
 // --- MVP ТАБЛИЦІ (Базовий функціонал) ---
@@ -96,7 +96,7 @@ Table PersonalProgress  {
 Ref: Member.experience_id > MemberExperience.id
 Ref: Membership.member_id > Member.id
 Ref: Membership.type_id > MembershipType.id
-Ref: Membership.status_id > MembershipStatus.id 
+Ref: Membership.status_id > MembershipStatus.id
 Ref: Attendance.member_id > Member.id
 Ref: Goals.member_id > Member.id
 Ref: PersonalProgress.member_id > Member.id
