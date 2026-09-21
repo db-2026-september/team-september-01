@@ -1,0 +1,56 @@
+Table Staff {
+  Staff_ID int [pk, increment]
+  Staff_Name varchar [not null]
+  Staff_Surname varchar [not null]
+  Job_Title varchar [not null] 
+}
+
+Table Frontdesk_Shifts {
+  Shift_ID int [pk, increment]
+  Staff_ID int
+  Shift_start datetime [not null]
+  Shift_end datetime [not null]
+}
+
+
+Table Membership_Plans {
+  Plan_ID int [pk, increment]
+  Plan_Name varchar [not null]    
+  Plan_Type varchar [not null]    
+  Price decimal [not null]        
+  Discount decimal [default: 0]   
+}
+
+Table Client_Memberships {
+  Subscription_ID int [pk, increment]
+  Member_ID int [not null]
+  Plan_ID int 
+  Start_Date date [not null]
+  End_Date date [not null] // Explicitly stored to handle freezes, extensions, and fast expiration queries
+  Status varchar [not null, default: 'Active'] // Current state: 'Active', 'Expired', 'Frozen', or 'Canceled'
+}
+
+
+Table Classes {
+  Class_ID int [pk, increment]
+  Class_Name varchar [not null]
+}
+
+Table Class_Schedule {
+  Schedule_ID int [pk, increment]
+  Class_ID int
+  Trainer_ID int [not null]
+  Date date [not null]
+  Time time [not null]
+}
+
+Table Class_Registrations {
+  Registration_ID int [pk, increment]
+  Schedule_ID int
+  Member_ID int [not null]
+}
+
+Ref: Frontdesk_Shifts.Staff_ID > Staff.Staff_ID
+Ref: Client_Memberships.Plan_ID > Membership_Plans.Plan_ID
+Ref: Class_Schedule.Class_ID > Classes.Class_ID
+Ref: Class_Registrations.Schedule_ID > Class_Schedule.Schedule_ID
