@@ -1,0 +1,240 @@
+// Sofia Hrebeniuk — Member Module ER Diagram (Member, MemberStatus, Attendance, MemberExperience, Goals, PersonalProgress)
+// --- MVP TABLES ---
+
+Table Member {
+  id integer [pk]
+  name varchar
+  surname varchar
+  experience_id integer
+  status_id integer
+  membership_id integer
+}
+
+Table MemberStatus {
+  id integer [pk]
+ status_name varchar // active, on pause, etc.
+}
+
+Table Attendance {
+  id integer [pk]
+  member_id integer
+  date date
+  time time
+}
+
+// --- EXTENDED TABLES / TRACKING ---
+
+Table MemberExperience {
+  id integer [pk]
+  level varchar // newbie, experienced, professional
+}
+
+Table Goals {
+  id integer [pk]
+  member_id integer
+  goal_description varchar
+  target_date date
+}
+
+Table PersonalProgress {
+  id integer [pk]
+  member_id integer
+  metrics varchar
+  date date
+}
+
+// --- RELATIONS ---
+Ref: Member.experience_id > MemberExperience.id
+Ref: Member.status_id > MemberStatus.id
+Ref: Attendance.member_id > Member.id
+Ref: Goals.member_id > Member.id
+Ref: PersonalProgress.member_id > Member.id
+
+//-- End of Sofia Hrebeniuk
+
+
+// Andrii Prymak - Trainer Module ER Diagram
+
+Table trainer {
+  id integer [primary key]
+  first_name varchar
+  last_name varchar
+  speciality varchar
+  phone varchar
+  email varchar
+  status varchar
+}
+
+Table trainer_availability {
+  id integer [primary key]
+  trainer_id integer [not null]
+  day_of_week varchar
+  start_time time
+  end_time time
+  is_available boolean
+}
+
+Table class {
+  id integer [primary key]
+  class_name varchar
+  description text
+  level varchar
+  capacity integer
+  duration integer
+}
+
+Table trainer_class {
+  id integer [primary key]
+  trainer_id integer [not null]
+  class_id integer [not null]
+  assigned_date date
+
+  indexes {
+    (trainer_id, class_id) [unique]
+  }
+}
+
+Table personal_training {
+  id integer [primary key]
+  trainer_id integer [not null]
+  visitor_id integer [not null]
+  start_date_time timestamp
+  duration integer
+  status varchar
+  notes text
+}
+
+Ref: trainer_availability.trainer_id > trainer.id
+Ref: trainer_class.trainer_id > trainer.id
+Ref: trainer_class.class_id > class.id
+Ref: personal_training.trainer_id > trainer.id
+
+//-- End of Andrii Prymak
+
+
+// Anastasiia Boyko - Staff Module ER Diagram
+
+Table Staff {
+  Staff_ID int [pk, increment]
+  Staff_Name varchar [not null]
+  Staff_Surname varchar [not null]
+  Job_Title varchar [not null]
+}
+
+Table Frontdesk_Shifts {
+  Shift_ID int [pk, increment]
+  Staff_ID int
+  Shift_start datetime [not null]
+  Shift_end datetime [not null]
+}
+
+
+Table Membership_Plans {
+  Plan_ID int [pk, increment]
+  Plan_Name varchar [not null]
+  Plan_Type varchar [not null]
+  Price decimal [not null]
+  Discount decimal [default: 0]
+}
+
+Table Client_Memberships {
+  Subscription_ID int [pk, increment]
+  Member_ID int [not null]
+  Plan_ID int
+  Start_Date date [not null]
+  End_Date date [not null] // Explicitly stored to handle freezes, extensions, and fast expiration queries
+  Status varchar [not null, default: 'Active'] // Current state: 'Active', 'Expired', 'Frozen', or 'Canceled'
+}
+
+
+Table Classes {
+  Class_ID int [pk, increment]
+  Class_Name varchar [not null]
+}
+
+Table Class_Schedule {
+  Schedule_ID int [pk, increment]
+  Class_ID int
+  Trainer_ID int [not null]
+  Date date [not null]
+  Time time [not null]
+}
+
+Table Class_Registrations {
+  Registration_ID int [pk, increment]
+  Schedule_ID int
+  Member_ID int [not null]
+}
+
+Ref: Frontdesk_Shifts.Staff_ID > Staff.Staff_ID
+Ref: Client_Memberships.Plan_ID > Membership_Plans.Plan_ID
+Ref: Class_Schedule.Class_ID > Classes.Class_ID
+Ref: Class_Registrations.Schedule_ID > Class_Schedule.Schedule_ID
+
+//-- End of Anastasiia Boyko
+
+
+// Vladyslav Tupikin - Fitness Room Module ER Diagram
+
+Table FitnessFloor {
+  floor_number integer [primary key]
+  floor_name text [not null]
+}
+
+Table FitnessRoom {
+  room_id integer [primary key]
+  floor_number integer [not null]
+  room_name text [not null, note: 'Yoga or Gym or pool']
+  room_type text [not null]
+  class_assigned text
+  door_number integer [not null]
+  clean_schedule_id integer [not null]
+}
+
+Table Equipment {
+  id integer [primary key]
+  name text
+  status_id integer [not null]
+}
+
+Table EquipmentStatus {
+  id integer [primary key]
+  status text [not null, note: 'Maintained, Broken, In-Repair']
+}
+
+Table RoomEquipment {
+  room_id integer [primary key]
+  equipment_id integer [primary key]
+  equipment_number integer
+}
+
+
+Table CleaningSchedule {
+  id integer [primary key]
+  room_id integer [not null]
+  cleaner_id integer [not null]
+  status text [note: 'Cleaning in process or done']
+  cleaning_date date
+  start_time time
+  end_time time
+}
+
+Table MaintenanceSchedule {
+  id integer [primary key]
+  maintainer_id integer [not null]
+  equipment_id integer [not null]
+  status text [note: 'Maintenance in process or done']
+  maintenance_date date
+  start_time time
+  end_time time
+}
+
+
+Ref: FitnessFloor.floor_number < FitnessRoom.floor_number
+Ref: FitnessRoom.room_id < RoomEquipment.room_id
+ref: RoomEquipment.equipment_id > Equipment.id
+Ref: FitnessRoom.room_id < CleaningSchedule.room_id
+Ref: Equipment.status_id > EquipmentStatus.id
+Ref: MaintenanceSchedule.equipment_id > Equipment.id
+
+//-- End of Vladyslav Tupikin
