@@ -146,12 +146,6 @@ Table Client_Memberships {
   Status varchar [not null, default: 'Active'] // Current state: 'Active', 'Expired', 'Frozen', or 'Canceled'
 }
 
-
-Table Classes {
-  Class_ID int [pk, increment]
-  Class_Name varchar [not null]
-}
-
 Table Class_Schedule {
   Schedule_ID int [pk, increment]
   Class_ID int
@@ -168,8 +162,15 @@ Table Class_Registrations {
 
 Ref: Frontdesk_Shifts.Staff_ID > Staff.Staff_ID
 Ref: Client_Memberships.Plan_ID > Membership_Plans.Plan_ID
-Ref: Class_Schedule.Class_ID > Classes.Class_ID
 Ref: Class_Registrations.Schedule_ID > Class_Schedule.Schedule_ID
+
+// Andrii Prymak (Trainer) 
+Ref: Class_Schedule.Class_ID > class.id
+Ref: Class_Schedule.Trainer_ID > trainer.id
+
+// VladyslavTupikin (Fitness room) 
+Ref: CleaningSchedule.cleaner_id > Staff.Staff_ID
+Ref: MaintenanceSchedule.maintainer_id > Staff.Staff_ID
 
 //-- End of Anastasiia Boyko
 
