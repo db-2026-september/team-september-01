@@ -7,7 +7,6 @@ Table Member {
   surname varchar
   experience_id integer
   status_id integer
-  membership_id integer
 }
 
 Table MemberStatus {
@@ -43,15 +42,24 @@ Table PersonalProgress {
   date date
 }
 
-// --- RELATIONS ---
+// --- INTERNAL RELATIONS ---
 Ref: Member.experience_id > MemberExperience.id
 Ref: Member.status_id > MemberStatus.id
 Ref: Attendance.member_id > Member.id
 Ref: Goals.member_id > Member.id
 Ref: PersonalProgress.member_id > Member.id
 
-//-- End of Sofia Hrebeniuk
 
+// --- CROSS-MODULE RELATIONS ---
+
+// Anastasiia Boyko (Staff & Membership Module)
+Ref: Client_Memberships.Member_ID > Member.id
+Ref: Class_Registrations.Member_ID > Member.id
+
+// Andrii Prymak (Trainer Module)
+Ref: personal_training.visitor_id > Member.id
+
+//-- End of Sofia Hrebeniuk
 
 // Andrii Prymak - Trainer Module ER Diagram
 
