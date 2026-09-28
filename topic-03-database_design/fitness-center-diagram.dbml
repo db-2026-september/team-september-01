@@ -52,39 +52,40 @@ Ref: PersonalProgress.member_id > Member.id
 Ref: PersonalProgress.metric_type_id > MetricType.id
 Ref: ClientMemberships.member_id > Member.id
 Ref: ClassRegistrations.member_id > Member.id
-Ref: Personal_training.member_id > Member.id
+Ref: PersonalTraining.member_id > Member.id
 
 // Andrii Prymak - Trainer Module ER Diagram
 
-Table trainer {
+Table Trainer {
   id integer [primary key]
-  first_name varchar
-  last_name varchar
+  first_name varchar [not null]
+  last_name varchar [not null]
   speciality varchar
   phone varchar
   email varchar
   status varchar
 }
 
-Table trainer_availability {
+Table TrainerAvailability {
   id integer [primary key]
   trainer_id integer [not null]
-  day_of_week varchar
+  date datetime [not null]
   start_time time
   end_time time
   is_available boolean
 }
 
-Table class {
+Table Class {
   id integer [primary key]
   class_name varchar
-  description text
+  description varchar
   level varchar
   capacity integer
-  duration integer
+  duration integer [not null]
+  duration_unit varchar [default: 'minutes']
 }
 
-Table trainer_class {
+Table TrainerClass {
   id integer [primary key]
   trainer_id integer [not null]
   class_id integer [not null]
@@ -95,7 +96,7 @@ Table trainer_class {
   }
 }
 
-Table personal_training {
+Table PersonalTraining {
   id integer [primary key]
   trainer_id integer [not null]
   visitor_id integer [not null]
@@ -105,10 +106,10 @@ Table personal_training {
   notes text
 }
 
-Ref: trainer_availability.trainer_id > trainer.id
-Ref: trainer_class.trainer_id > trainer.id
-Ref: trainer_class.class_id > class.id
-Ref: personal_training.trainer_id > trainer.id
+Ref: TrainerAvailability.trainer_id > trainer.id
+Ref: TrainerClass.trainer_id > trainer.id
+Ref: TrainerClass.class_id > class.id
+Ref: PersonalTraining.trainer_id > trainer.id
 
 //-- End of Andrii Prymak
 
@@ -172,8 +173,8 @@ Ref: ClientMemberships.plan_id > MembershipPlans.id
 Ref: ClassRegistrations.schedule_id > ClassSchedule.id
 
 // Andrii Prymak (Trainer)
-Ref: ClassSchedule.class_id > class.id
-Ref: ClassSchedule.trainer_id > trainer.id
+Ref: ClassSchedule.class_id > Class.id
+Ref: ClassSchedule.trainer_id > Trainer.id
 
 // VladyslavTupikin (Fitness room)
 Ref: CleaningSchedule.cleaner_id > Staff.id
