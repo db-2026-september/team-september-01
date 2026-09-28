@@ -40,7 +40,7 @@ Table trainer_class {
 Table personal_training {
   id integer [primary key]
   trainer_id integer [not null]
-  visitor_id integer [not null]
+  member_id integer [not null]
   start_date_time timestamp
   duration integer
   status varchar
@@ -52,6 +52,8 @@ Ref: trainer_availability.trainer_id > trainer.id
 Ref: trainer_class.trainer_id > trainer.id
 Ref: trainer_class.class_id > class.id
 Ref: personal_training.trainer_id > trainer.id
+Ref: personal_training.member_id > Member.id
+
 
 
 
