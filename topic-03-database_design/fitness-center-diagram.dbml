@@ -42,24 +42,16 @@ Table PersonalProgress {
   date date
 }
 
-// --- INTERNAL RELATIONS ---
+// ---  RELATIONS ---
 Ref: Member.experience_id > MemberExperience.id
 Ref: Member.status_id > MemberStatus.id
 Ref: Attendance.member_id > Member.id
 Ref: Goals.member_id > Member.id
 Ref: PersonalProgress.member_id > Member.id
-
-
-// --- CROSS-MODULE RELATIONS ---
-
-// Anastasiia Boyko (Staff & Membership Module)
 Ref: Client_Memberships.Member_ID > Member.id
 Ref: Class_Registrations.Member_ID > Member.id
+Ref: personal_training.member_id > Member.id
 
-// Andrii Prymak (Trainer Module)
-Ref: personal_training.visitor_id > Member.id
-
-//-- End of Sofia Hrebeniuk
 
 // Andrii Prymak - Trainer Module ER Diagram
 
