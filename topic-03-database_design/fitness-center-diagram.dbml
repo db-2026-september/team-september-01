@@ -204,9 +204,14 @@ Table EquipmentStatus {
 }
 
 Table RoomEquipment {
-  room_id integer [primary key]
-  equipment_id integer [primary key]
+  id integer [pk, increment]
+  room_id integer [not null]
+  equipment_id integer [not null]
   equipment_number integer
+
+  indexes {
+    (room_id, equipment_id) [unique]  // Унікальна комбінація
+  }
 }
 
 
