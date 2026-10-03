@@ -55,7 +55,7 @@ Ref: personal_training.member_id > Member.id
 
 // Andrii Prymak - Trainer Module ER Diagram
 
-Table trainer {
+Table Trainer {
   id integer [primary key]
   first_name varchar
   last_name varchar
@@ -65,7 +65,7 @@ Table trainer {
   status varchar
 }
 
-Table trainer_availability {
+Table TrainerAvailability {
   id integer [primary key]
   trainer_id integer [not null]
   day_of_week varchar
@@ -74,7 +74,7 @@ Table trainer_availability {
   is_available boolean
 }
 
-Table class {
+Table Class {
   id integer [primary key]
   class_name varchar
   description text
@@ -83,7 +83,7 @@ Table class {
   duration integer
 }
 
-Table trainer_class {
+Table TrainerClass {
   id integer [primary key]
   trainer_id integer [not null]
   class_id integer [not null]
@@ -94,20 +94,21 @@ Table trainer_class {
   }
 }
 
-Table personal_training {
+Table PersonalTraining {
   id integer [primary key]
   trainer_id integer [not null]
-  visitor_id integer [not null]
+  member_id integer [not null]
   start_date_time timestamp
   duration integer
   status varchar
   notes text
 }
 
-Ref: trainer_availability.trainer_id > trainer.id
-Ref: trainer_class.trainer_id > trainer.id
-Ref: trainer_class.class_id > class.id
-Ref: personal_training.trainer_id > trainer.id
+Ref: TrainerAvailability.trainer_id > Trainer.id
+Ref: TrainerClass.trainer_id > Trainer.id
+Ref: TrainerClass.class_id > Class.id
+Ref: PersonalTraining.trainer_id > Trainer.id
+Ref: PersonalTraining.member_id > Member.id
 
 //-- End of Andrii Prymak
 
@@ -165,8 +166,8 @@ Ref: ClientMemberships.plan_id > MembershipPlans.id
 Ref: ClassRegistrations.schedule_id > ClassSchedule.id
 
 // Andrii Prymak (Trainer)
-Ref: ClassSchedule.class_id > class.id
-Ref: ClassSchedule.trainer_id > trainer.id
+Ref: ClassSchedule.class_id > Class.id
+Ref: ClassSchedule.trainer_id > Trainer.id
 
 // VladyslavTupikin (Fitness room)
 Ref: CleaningSchedule.cleaner_id > Staff.id
@@ -240,6 +241,6 @@ ref: RoomEquipment.equipment_id > Equipment.id
 Ref: FitnessRoom.room_id < CleaningSchedule.room_id
 Ref: Equipment.status_id > EquipmentStatus.id
 Ref: MaintenanceSchedule.equipment_id > Equipment.id
-Ref: FitnessRoom.class_assigned > class.id
+Ref: FitnessRoom.class_assigned > Class.id
 
 //-- End of Vladyslav Tupikin
