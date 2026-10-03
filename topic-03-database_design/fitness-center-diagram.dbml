@@ -7,7 +7,6 @@ Table Member {
   surname varchar
   experience_id integer
   status_id integer
-  membership_id integer
 }
 
 Table MemberStatus {
@@ -43,14 +42,15 @@ Table PersonalProgress {
   date date
 }
 
-// --- RELATIONS ---
+// ---  RELATIONS ---
 Ref: Member.experience_id > MemberExperience.id
 Ref: Member.status_id > MemberStatus.id
 Ref: Attendance.member_id > Member.id
 Ref: Goals.member_id > Member.id
 Ref: PersonalProgress.member_id > Member.id
-
-//-- End of Sofia Hrebeniuk
+Ref: Client_Memberships.Member_ID > Member.id
+Ref: Class_Registrations.Member_ID > Member.id
+Ref: personal_training.member_id > Member.id
 
 
 // Andrii Prymak - Trainer Module ER Diagram
@@ -142,8 +142,8 @@ Table ClientMemberships {
   member_id int [not null]
   plan_id int
   start_date date [not null]
-  end_date date [not null] 
-  status varchar [not null, default: 'Active'] 
+  end_date date [not null]
+  status varchar [not null, default: 'Active']
 }
 
 Table ClassSchedule {
@@ -164,11 +164,11 @@ Ref: FrontdeskShifts.staff_id > Staff.id
 Ref: ClientMemberships.plan_id > MembershipPlans.id
 Ref: ClassRegistrations.schedule_id > ClassSchedule.id
 
-// Andrii Prymak (Trainer) 
+// Andrii Prymak (Trainer)
 Ref: ClassSchedule.class_id > class.id
 Ref: ClassSchedule.trainer_id > trainer.id
 
-// VladyslavTupikin (Fitness room) 
+// VladyslavTupikin (Fitness room)
 Ref: CleaningSchedule.cleaner_id > Staff.id
 Ref: MaintenanceSchedule.maintainer_id > Staff.id
 //-- End of Anastasiia Boyko
@@ -186,9 +186,8 @@ Table FitnessRoom {
   floor_number integer [not null]
   room_name text [not null, note: 'Yoga or Gym or pool']
   room_type text [not null]
-  class_assigned text
+  class_assigned integer
   door_number integer [not null]
-  clean_schedule_id integer [not null]
 }
 
 Table Equipment {
@@ -199,13 +198,18 @@ Table Equipment {
 
 Table EquipmentStatus {
   id integer [primary key]
-  status text [not null, note: 'Maintained, Broken, In-Repair']
+  status varchar [not null, note: 'Maintained, Broken, In-Repair', default: 'Broken']
 }
 
 Table RoomEquipment {
-  room_id integer [primary key]
-  equipment_id integer [primary key]
+  id integer [pk, increment]
+  room_id integer [not null]
+  equipment_id integer [not null]
   equipment_number integer
+
+  indexes {
+    (room_id, equipment_id) [unique]  // Унікальна комбінація
+  }
 }
 
 
@@ -213,7 +217,7 @@ Table CleaningSchedule {
   id integer [primary key]
   room_id integer [not null]
   cleaner_id integer [not null]
-  status text [note: 'Cleaning in process or done']
+  status varchar [not null, note: 'Scheduled, In Progress, Completed', default: 'Scheduled']
   cleaning_date date
   start_time time
   end_time time
@@ -223,7 +227,7 @@ Table MaintenanceSchedule {
   id integer [primary key]
   maintainer_id integer [not null]
   equipment_id integer [not null]
-  status text [note: 'Maintenance in process or done']
+  status varchar [not null, note: 'Scheduled, In Progress, Completed', default: 'Scheduled']
   maintenance_date date
   start_time time
   end_time time
@@ -236,5 +240,6 @@ ref: RoomEquipment.equipment_id > Equipment.id
 Ref: FitnessRoom.room_id < CleaningSchedule.room_id
 Ref: Equipment.status_id > EquipmentStatus.id
 Ref: MaintenanceSchedule.equipment_id > Equipment.id
+Ref: FitnessRoom.class_assigned > class.id
 
 //-- End of Vladyslav Tupikin
