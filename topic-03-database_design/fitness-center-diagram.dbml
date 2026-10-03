@@ -28,13 +28,18 @@ Table Goals {
   target_date date
 }
 
+Table MetricType {
+  id integer [primary key]
+  name varchar [not null]
+  default_unit varchar [not null]
+}
+
 Table PersonalProgress {
   id integer [primary key]
   member_id integer [not null]
-  metric_type varchar
+  metric_type_id integer [not null]
   metric_value decimal(10,2)
-  unit varchar
-  date date
+  date date [not null]
 }
 
 // ---  RELATIONS ---
@@ -44,6 +49,7 @@ Ref: Goals.member_id > Member.id
 Ref: PersonalProgress.member_id > Member.id
 Ref: ClientMemberships.member_id > Member.id
 Ref: ClassRegistrations.member_id > Member.id
+Ref: PersonalProgress.metric_type_id > MetricType.id
 
 
 // Andrii Prymak - Trainer Module ER Diagram
