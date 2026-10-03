@@ -38,7 +38,9 @@ Table Goals {
 Table PersonalProgress {
   id integer [pk]
   member_id integer
-  metrics varchar
+  metric_type varchar
+  metric_value decimal
+  unit varchar
   date date
 }
 
