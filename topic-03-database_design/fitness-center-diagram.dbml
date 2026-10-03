@@ -11,8 +11,7 @@ Table Member {
 Table Attendance {
   id integer [primary key]
   member_id integer [not null]
-  date date
-  time time
+  date datetime
 }
 
 // --- EXTENDED TABLES / TRACKING ---
@@ -74,7 +73,8 @@ Table Class {
   description varchar
   level varchar
   capacity integer
-  duration integer
+  duration integer [not null]
+  duration_unit varchar [default: 'minutes']
 }
 
 Table TrainerClass {
@@ -93,7 +93,8 @@ Table PersonalTraining {
   trainer_id integer [not null]
   member_id integer [not null]
   start_date_time timestamp
-  duration integer
+  duration integer [not null]
+  duration_unit varchar [default: 'minutes']
   status varchar
   notes varchar
 }
@@ -146,8 +147,8 @@ Table ClassSchedule {
   class_id integer [not null]
   room_id integer [not null]
   trainer_id integer [not null]
-  date date [not null]
-  time time [not null]
+  date datetime [not null]
+  duration integer [not null]
 }
 
 Table ClassRegistrations {
@@ -218,9 +219,9 @@ Table CleaningSchedule {
   room_id integer [not null]
   cleaner_id integer [not null]
   status varchar [not null, note: 'Scheduled, In Progress, Completed', default: 'Scheduled']
-  cleaning_date date
-  start_time time
-  end_time time
+  cleaning_date datetime [not null]
+  duration integer [not null]
+  duration_unit varchar [default: 'minutes']
 }
 
 Table MaintenanceSchedule {
@@ -228,9 +229,9 @@ Table MaintenanceSchedule {
   maintainer_id integer [not null]
   equipment_id integer [not null]
   status varchar [not null, note: 'Scheduled, In Progress, Completed', default: 'Scheduled']
-  maintenance_date date
-  start_time time
-  end_time time
+  maintenance_date datetime [not null]
+  duration integer [not null]
+  duration_unit varchar [default: 'minutes']
 }
 
 
