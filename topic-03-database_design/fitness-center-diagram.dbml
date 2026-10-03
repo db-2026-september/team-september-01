@@ -5,12 +5,12 @@ Table Member {
   id integer [primary key]
   first_name varchar
   last_name varchar
-  experience_id integer
+  experience_id integer [not null]
 }
 
 Table Attendance {
   id integer [primary key]
-  member_id integer
+  member_id integer [not null]
   date date
   time time
 }
@@ -24,14 +24,14 @@ Table MemberExperience {
 
 Table Goals {
   id integer [primary key]
-  member_id integer
+  member_id integer [not null]
   goal_description varchar
   target_date date
 }
 
 Table PersonalProgress {
   id integer [primary key]
-  member_id integer
+  member_id integer [not null]
   metric_type varchar
   metric_value decimal(10,2)
   unit varchar
@@ -118,7 +118,7 @@ Table Staff {
 
 Table FrontdeskShifts {
   id integer [pk, increment]
-  staff_id integer
+  staff_id integer [not null]
   start datetime [not null]
   end datetime [not null]
 }
@@ -135,7 +135,7 @@ Table MembershipPlans {
 Table ClientMemberships {
   id integer [pk, increment]
   member_id integer [not null]
-  plan_id integer
+  plan_id integer [not null]
   start_date date [not null]
   end_date date [not null]
   status varchar [not null, default: 'Active']
@@ -143,8 +143,8 @@ Table ClientMemberships {
 
 Table ClassSchedule {
   id integer [pk, increment]
-  class_id integer
-  room_id integer
+  class_id integer [not null]
+  room_id integer [not null]
   trainer_id integer [not null]
   date date [not null]
   time time [not null]
@@ -152,7 +152,7 @@ Table ClassSchedule {
 
 Table ClassRegistrations {
   id integer [pk, increment]
-  schedule_id integer
+  schedule_id integer [not null]
   member_id integer [not null]
 }
 
