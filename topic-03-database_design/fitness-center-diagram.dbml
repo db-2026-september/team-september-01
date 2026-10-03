@@ -3,8 +3,8 @@
 
 Table Member {
   id integer [primary key]
-  first_name varchar
-  last_name varchar
+  first_name varchar [not null]
+  last_name varchar [not null]
   experience_id integer [not null]
 }
 
@@ -51,8 +51,8 @@ Ref: ClassRegistrations.member_id > Member.id
 
 Table Trainer {
   id integer [primary key]
-  first_name varchar
-  last_name varchar
+  first_name varchar [not null]
+  last_name varchar [not null]
   speciality varchar
   phone varchar
   email varchar
