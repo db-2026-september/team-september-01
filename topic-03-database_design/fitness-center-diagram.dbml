@@ -6,12 +6,12 @@ Table Member {
   name varchar
   surname varchar
   experience_id integer
-  status_id integer
+  membership_status integer
 }
 
-Table MemberStatus {
+Table MembershipStatus {
   id integer [pk]
- status_name varchar // active, on pause, etc.
+  status_name varchar [note: 'active, expired', default: 'expired']
 }
 
 Table Attendance {
@@ -46,7 +46,7 @@ Table PersonalProgress {
 
 // ---  RELATIONS ---
 Ref: Member.experience_id > MemberExperience.id
-Ref: Member.status_id > MemberStatus.id
+Ref: Member.membership_status > MembershipStatus.id
 Ref: Attendance.member_id > Member.id
 Ref: Goals.member_id > Member.id
 Ref: PersonalProgress.member_id > Member.id
