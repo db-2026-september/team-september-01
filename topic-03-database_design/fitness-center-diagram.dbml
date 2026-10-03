@@ -193,8 +193,9 @@ Table FitnessRoom {
 
 Table Equipment {
   id integer [primary key]
-  name varchar
+  name varchar [not null]
   status_id integer [not null]
+  quantity integer [not null]
 }
 
 Table EquipmentStatus {
@@ -206,7 +207,6 @@ Table RoomEquipment {
   id integer [pk, increment]
   room_id integer [not null]
   equipment_id integer [not null]
-  equipment_number integer
 
   indexes {
     (room_id, equipment_id) [unique]  // Унікальна комбінація
