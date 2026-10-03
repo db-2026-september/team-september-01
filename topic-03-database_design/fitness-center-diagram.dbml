@@ -3,8 +3,8 @@
 
 Table Member {
   id integer [pk]
-  name varchar
-  surname varchar
+  first_name varchar
+  last_name varchar
   experience_id integer
   membership_status integer
 }
@@ -118,8 +118,8 @@ Ref: PersonalTraining.member_id > Member.id
 
 Table Staff {
   id integer [pk, increment]
-  name varchar [not null]
-  surname varchar [not null]
+  first_name varchar [not null]
+  last_name varchar [not null]
   title varchar [not null]
 }
 
