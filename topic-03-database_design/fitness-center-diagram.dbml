@@ -154,6 +154,10 @@ Table ClassRegistrations {
   id integer [pk, increment]
   schedule_id integer [not null]
   member_id integer [not null]
+
+  indexes {
+    (schedule_id, member_id) [unique]
+  }
 }
 
 Ref: FrontdeskShifts.staff_id > Staff.id
