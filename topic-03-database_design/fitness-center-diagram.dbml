@@ -6,12 +6,6 @@ Table Member {
   first_name varchar
   last_name varchar
   experience_id integer
-  membership_status integer
-}
-
-Table MembershipStatus {
-  id integer [primary key]
-  status_name varchar [note: 'active, expired', default: 'expired']
 }
 
 Table Attendance {
@@ -39,14 +33,13 @@ Table PersonalProgress {
   id integer [primary key]
   member_id integer
   metric_type varchar
-  metric_value decimal
+  metric_value decimal(10,2)
   unit varchar
   date date
 }
 
 // ---  RELATIONS ---
 Ref: Member.experience_id > MemberExperience.id
-Ref: Member.membership_status > MembershipStatus.id
 Ref: Attendance.member_id > Member.id
 Ref: Goals.member_id > Member.id
 Ref: PersonalProgress.member_id > Member.id
@@ -135,8 +128,8 @@ Table MembershipPlans {
   id integer [pk, increment]
   name varchar [not null]
   type varchar [not null]
-  price decimal [not null]
-  discount decimal [default: 0]
+  price decimal(10,2) [not null]
+  discount decimal(10,2) [default: 0]
 }
 
 Table ClientMemberships {
