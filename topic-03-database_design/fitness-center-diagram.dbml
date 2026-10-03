@@ -61,7 +61,7 @@ Table Trainer {
 Table TrainerAvailability {
   id integer [primary key]
   trainer_id integer [not null]
-  day_of_week varchar
+  date datetime [not null]
   start_time time
   end_time time
   is_available boolean
