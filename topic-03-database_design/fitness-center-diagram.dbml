@@ -189,6 +189,7 @@ Table FitnessRoom {
   room_name varchar [not null, note: 'Yoga or Gym or pool']
   room_type varchar [not null]
   door_number integer [not null]
+  max_capacity integer [not null]
 }
 
 Table Equipment {
