@@ -186,9 +186,8 @@ Table FitnessRoom {
   floor_number integer [not null]
   room_name text [not null, note: 'Yoga or Gym or pool']
   room_type text [not null]
-  class_assigned text
+  class_assigned integer
   door_number integer [not null]
-  clean_schedule_id integer [not null]
 }
 
 Table Equipment {
@@ -199,7 +198,7 @@ Table Equipment {
 
 Table EquipmentStatus {
   id integer [primary key]
-  status text [not null, note: 'Maintained, Broken, In-Repair']
+  status varchar [not null, note: 'Maintained, Broken, In-Repair', default: 'Broken']
 }
 
 Table RoomEquipment {
@@ -218,7 +217,7 @@ Table CleaningSchedule {
   id integer [primary key]
   room_id integer [not null]
   cleaner_id integer [not null]
-  status text [note: 'Cleaning in process or done']
+  status varchar [not null, note: 'Scheduled, In Progress, Completed', default: 'Scheduled']
   cleaning_date date
   start_time time
   end_time time
@@ -228,7 +227,7 @@ Table MaintenanceSchedule {
   id integer [primary key]
   maintainer_id integer [not null]
   equipment_id integer [not null]
-  status text [note: 'Maintenance in process or done']
+  status varchar [not null, note: 'Scheduled, In Progress, Completed', default: 'Scheduled']
   maintenance_date date
   start_time time
   end_time time
@@ -241,5 +240,6 @@ ref: RoomEquipment.equipment_id > Equipment.id
 Ref: FitnessRoom.room_id < CleaningSchedule.room_id
 Ref: Equipment.status_id > EquipmentStatus.id
 Ref: MaintenanceSchedule.equipment_id > Equipment.id
+Ref: FitnessRoom.class_assigned > class.id
 
 //-- End of Vladyslav Tupikin
