@@ -134,8 +134,8 @@ Table MembershipPlans {
   id integer [primary key, increment]
   name varchar [not null]
   type varchar [not null]
-  price decimal [not null]
-  discount decimal [default: 0]
+  price decimal(10,2) [not null]
+  discount decimal(10,2) [default: 0]
 }
 
 Table ClientMemberships {
