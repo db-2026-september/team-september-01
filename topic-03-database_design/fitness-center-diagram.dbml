@@ -125,8 +125,8 @@ Table Staff {
 Table FrontdeskShifts {
   id integer [primary key, increment]
   staff_id integer [not null]
-  start datetime [not null]
-  end datetime [not null]
+  shift_start datetime [not null]
+  shift_end datetime [not null]
 }
 
 
