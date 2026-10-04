@@ -236,10 +236,10 @@ Table MaintenanceSchedule {
 }
 
 
-Ref: FitnessFloor.floor_number < FitnessRoom.floor_number
-Ref: FitnessRoom.room_id < RoomEquipment.room_id
-ref: RoomEquipment.equipment_id > Equipment.id
-Ref: FitnessRoom.room_id < CleaningSchedule.room_id
+Ref: FitnessRoom.floor_number > FitnessFloor.floor_number
+Ref: RoomEquipment.room_id > FitnessRoom.room_id
+Ref: RoomEquipment.equipment_id > Equipment.id
+Ref: CleaningSchedule.room_id > FitnessRoom.room_id
 Ref: Equipment.status_id > EquipmentStatus.id
 Ref: MaintenanceSchedule.equipment_id > Equipment.id
 
