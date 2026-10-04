@@ -116,22 +116,22 @@ Ref: personal_training.trainer_id > trainer.id
 // Anastasiia Boyko - Staff Module ER Diagram
 
 Table Staff {
-  id int [pk, increment]
+  id integer [primary key, increment]
   name varchar [not null]
   surname varchar [not null]
   title varchar [not null]
 }
 
 Table FrontdeskShifts {
-  id int [pk, increment]
-  staff_id int
+  id integer [primary key, increment]
+  staff_id integer
   start datetime [not null]
   end datetime [not null]
 }
 
 
 Table MembershipPlans {
-  id int [pk, increment]
+  id integer [primary key, increment]
   name varchar [not null]
   type varchar [not null]
   price decimal [not null]
@@ -139,27 +139,27 @@ Table MembershipPlans {
 }
 
 Table ClientMemberships {
-  id int [pk, increment]
-  member_id int [not null]
-  plan_id int
+  id integer [primary key, increment]
+  member_id integer [not null]
+  plan_id integer [not null]
   start_date date [not null]
   end_date date [not null]
   status varchar [not null, default: 'Active']
 }
 
 Table ClassSchedule {
-  id int [pk, increment]
-  class_id int
-  room_id int [not null]
-  trainer_id int [not null]
+  id integer [primary key, increment]
+  class_id integer [not null]
+  room_id integer [not null]
+  trainer_id integer [not null]
   date date [not null]
   time time [not null]
 }
 
 Table ClassRegistrations {
-  id int [pk, increment]
-  schedule_id int
-  member_id int [not null]
+  id integer [primary key, increment]
+  schedule_id integer [not null]
+  member_id integer [not null]
 }
 
 Ref: FrontdeskShifts.staff_id > Staff.id
@@ -181,20 +181,20 @@ Ref: ClassSchedule.room_id > FitnessRoom.room_id
 
 Table FitnessFloor {
   floor_number integer [primary key]
-  floor_name text [not null]
+  floor_name varchar [not null]
 }
 
 Table FitnessRoom {
   room_id integer [primary key]
   floor_number integer [not null]
-  room_name text [not null, note: 'Yoga or Gym or pool']
-  room_type text [not null]
+  room_name varchar [not null, note: 'Yoga or Gym or pool']
+  room_type varchar [not null]
   door_number integer [not null]
 }
 
 Table Equipment {
   id integer [primary key]
-  name text
+  name varchar
   status_id integer [not null]
 }
 
@@ -204,7 +204,7 @@ Table EquipmentStatus {
 }
 
 Table RoomEquipment {
-  id integer [pk, increment]
+  id integer [primary key, increment]
   room_id integer [not null]
   equipment_id integer [not null]
   equipment_number integer
