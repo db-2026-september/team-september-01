@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS personal_progress;
+DROP TABLE IF EXISTS goals;
+DROP TABLE IF EXISTS attendance;
+DROP TABLE IF EXISTS member;
+DROP TABLE IF EXISTS metric_type;
+DROP TABLE IF EXISTS member_experience;
