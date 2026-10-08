@@ -1,129 +1,153 @@
 // Sofia Hrebeniuk — Member Module ER Diagram (Member, Attendance, MemberExperience, Goals, PersonalProgress,MetricType)
 // --- MVP TABLES ---
 
-Table Member {
+Table member {
   id integer [primary key]
   first_name varchar [not null]
   last_name varchar [not null]
   experience_id integer [not null]
 }
 
-Table Attendance {
+Table attendance {
   id integer [primary key]
-  member_id integer
-  attendance_date datetime
+  registration_id integer [not null, unique]
+  recorded_at timestamp [not null]
+  status varchar [not null, default: 'Present', note: 'Present, Late, Absent']
 }
 
 // --- EXTENDED TABLES / TRACKING ---
 
-Table MemberExperience {
+Table member_experience {
   id integer [primary key]
-  level varchar // newbie, experienced, professional
+  level varchar [not null, note: 'newbie, experienced, professional']
 }
 
-Table Goals {
+Table goals {
   id integer [primary key]
-  member_id integer
-  goal_description varchar
-  target_date date
+  member_id integer [not null]
+  goal_description varchar [not null]
+  target_date date [not null]
+  achieved_date date
+  status varchar [not null, default: 'Active', note: 'Active, Completed, Cancelled']
 }
 
-Table MetricType {
+Table metric_type {
   id integer [primary key]
-  metric_name varchar [not null]
-  unit varchar
+  metric_name varchar [not null, unique]
+  unit varchar [not null]
 }
 
-Table PersonalProgress {
+Table personal_progress {
   id integer [primary key]
   member_id integer [not null]
   metric_type_id integer [not null]
-  metric_value float [not null]
-  notes text
+  metric_value decimal(10,2) [not null]
   progress_date datetime [not null]
+  notes text
 }
 
 // --- RELATIONSHIPS ---
 
-Ref: Member.experience_id > MemberExperience.id
-Ref: Attendance.member_id > Member.id
-Ref: Goals.member_id > Member.id
-Ref: PersonalProgress.member_id > Member.id
-Ref: PersonalProgress.metric_type_id > MetricType.id
-Ref: ClientMemberships.member_id > Member.id
-Ref: ClassRegistrations.member_id > Member.id
-Ref: PersonalTraining.member_id > Member.id
+Ref: member.experience_id > member_experience.id
+Ref: goals.member_id > member.id
+Ref: personal_progress.member_id > member.id
+Ref: personal_progress.metric_type_id > metric_type.id
+Ref: client_memberships.member_id > member.id
+Ref: class_registrations.member_id > member.id
+Ref: attendance.registration_id > class_registrations.id
 
 // Andrii Prymak - Trainer Module ER Diagram
 
-Table Trainer {
+Table specialization {
   id integer [primary key]
-  first_name varchar [not null]
-  last_name varchar [not null]
-  speciality varchar
-  phone varchar
-  email varchar
-  status varchar
+  name varchar [not null, unique]
 }
 
-Table TrainerAvailability {
-  id integer [primary key]
+Table trainer_specialization {
   trainer_id integer [not null]
-  date datetime [not null]
-  start_time time
-  end_time time
-  is_available boolean
-}
-
-Table Class {
-  id integer [primary key]
-  class_name varchar
-  description varchar
-  level varchar
-  capacity integer
-  duration integer [not null]
-  duration_unit varchar [default: 'minutes']
-}
-
-Table TrainerClass {
-  id integer [primary key]
-  trainer_id integer [not null]
-  class_id integer [not null]
-  assigned_date date
+  specialization_id integer [not null]
+  certification_date date [not null]
+  certificate_number varchar [not null, unique]
 
   indexes {
-    (trainer_id, class_id) [unique]
+    (trainer_id, specialization_id) [pk]
   }
 }
 
-Table PersonalTraining {
+Table trainer {
+  id integer [primary key]
+  first_name varchar [not null]
+  last_name varchar [not null]
+  phone varchar [not null]
+  email varchar [not null, unique]
+  status varchar [not null, note: 'Active, Inactive, On-Leave']
+}
+
+Table trainer_availability {
   id integer [primary key]
   trainer_id integer [not null]
-  visitor_id integer [not null]
-  start_date_time timestamp
-  duration integer
-  status varchar
+  availability_date date [not null]
+  start_time time [not null]
+  end_time time [not null]
+
+}
+
+Table class {
+  id integer [primary key]
+  class_name varchar [not null]
+  description varchar
+  level varchar [not null, note: 'Beginner, Intermediate, Advanced']
+  capacity integer [not null]
+  duration integer [not null, note: 'Planned duration in minutes']
+}
+
+Table trainer_class {
+  trainer_id integer [not null]
+  class_id integer [not null]
+  assigned_date date [not null]
+  approved boolean [not null, default: false]
+  approved_by integer
+  approved_at datetime
+
+  indexes {
+    (trainer_id, class_id) [pk]
+  }
+}
+
+Table personal_training {
+  id integer [primary key]
+  trainer_id integer [not null]
+  member_id integer [not null]
+  scheduled_start timestamp [not null]
+  scheduled_end timestamp [not null]
+  actual_start timestamp
+  actual_end timestamp
+  status varchar [not null, note: 'Scheduled, In Progress, Completed, Cancelled']
   notes text
 }
 
-Ref: TrainerAvailability.trainer_id > trainer.id
-Ref: TrainerClass.trainer_id > trainer.id
-Ref: TrainerClass.class_id > class.id
-Ref: PersonalTraining.trainer_id > trainer.id
+Ref: trainer_availability.trainer_id > trainer.id
+Ref: trainer_class.trainer_id > trainer.id
+Ref: trainer_class.class_id > class.id
+Ref: trainer_class.approved_by > staff.id
+Ref: personal_training.trainer_id > trainer.id
+Ref: personal_training.member_id > member.id
+Ref: trainer_specialization.trainer_id > trainer.id
+Ref: trainer_specialization.specialization_id > specialization.id
 
 //-- End of Andrii Prymak
 
 
 // Anastasiia Boyko - Staff Module ER Diagram
 
-Table Staff {
+Table staff {
   id integer [primary key, increment]
   first_name varchar [not null]
   last_name varchar [not null]
   title varchar [not null]
 }
 
-Table FrontdeskShifts {
+Table frontdesk_shifts {
   id integer [primary key, increment]
   staff_id integer [not null]
   shift_start datetime [not null]
@@ -131,123 +155,124 @@ Table FrontdeskShifts {
 }
 
 
-Table MembershipPlans {
+Table membership_plans {
   id integer [primary key, increment]
-  name varchar [not null]
-  type varchar [not null]
+  name varchar [not null, note: 'Premium Monthly, Premium Annual, Standard Monthly, Standard Annual']
+  type varchar [not null, note: 'Premium, Standard']
   price decimal(10,2) [not null]
-  discount decimal(10,2) [default: 0]
+  discount integer [default: 0, note: 'Discount percentage']
 }
 
-Table ClientMemberships {
+Table client_memberships {
   id integer [primary key, increment]
   member_id integer [not null]
   plan_id integer [not null]
   start_date date [not null]
   end_date date [not null]
-  status varchar [not null, default: 'Active']
+  status varchar [not null, default: 'Active', note: 'Active, Expired, Suspended, Cancelled']
 }
 
-Table ClassSchedule {
-  id integer [primary key, increment]
+Table class_schedule {
+  id integer [primary key]
   class_id integer [not null]
   room_id integer [not null]
   trainer_id integer [not null]
-  class_date datetime [not null]
-  duration integer [not null]
-  duration_unit varchar [default: 'minutes']
+  scheduled_start timestamp [not null]
+  scheduled_end timestamp [not null]
+  actual_start timestamp
+  actual_end timestamp
+  status varchar [not null, default: 'Scheduled', note: 'Scheduled, In Progress, Completed, Cancelled']
 }
 
-Table ClassRegistrations {
+Table class_registrations {
   id integer [primary key, increment]
   schedule_id integer [not null]
   member_id integer [not null]
 
   indexes {
-    (schedule_id, member_id) [unique]
+    (schedule_id, member_id) [pk]
   }
 }
 
-Ref: FrontdeskShifts.staff_id > Staff.id
-Ref: ClientMemberships.plan_id > MembershipPlans.id
-Ref: ClassRegistrations.schedule_id > ClassSchedule.id
-
-// Andrii Prymak (Trainer)
-Ref: ClassSchedule.class_id > Class.id
-Ref: ClassSchedule.trainer_id > Trainer.id
-
-// VladyslavTupikin (Fitness room)
-Ref: CleaningSchedule.cleaner_id > Staff.id
-Ref: MaintenanceSchedule.maintainer_id > Staff.id
-Ref: ClassSchedule.room_id > FitnessRoom.room_id
+Ref: frontdesk_shifts.staff_id > staff.id
+Ref: client_memberships.plan_id > membership_plans.id
+Ref: class_registrations.schedule_id > class_schedule.id
+Ref: class_schedule.class_id > class.id
+Ref: class_schedule.trainer_id > trainer.id
+Ref: cleaning_schedule.cleaner_id > staff.id
+Ref: maintenance_schedule.maintainer_id > staff.id
+Ref: class_schedule.room_id > fitness_room.room_id
 //-- End of Anastasiia Boyko
 
 
 // Vladyslav Tupikin - Fitness Room Module ER Diagram
 
-Table FitnessFloor {
+Table fitness_floor {
   floor_number integer [primary key]
   floor_name varchar [not null]
 }
 
-Table FitnessRoom {
+Table fitness_room {
   room_id integer [primary key]
-  floor_number integer [not null]
-  room_name varchar [not null, note: 'Yoga or Gym or pool']
-  room_type varchar [not null]
-  door_number integer [not null]
+  floor_number integer [not null, unique]
+  room_name varchar [not null, note: 'Studio A, Studio B, Main Gym']
+  room_type varchar [not null, note: 'Yoga, Gym, Pool, Spinning']
+  door_number integer [not null, unique]
   max_capacity integer [not null]
 }
 
-Table Equipment {
+Table equipment {
   id integer [primary key]
   name varchar [not null]
-  status_id integer [not null]
-  quantity integer [not null]
 }
 
-Table EquipmentStatus {
+Table equipment_item {
   id integer [primary key]
-  status varchar [not null, note: 'Maintained, Broken, In-Repair', default: 'Broken']
+  equipment_id integer [not null]
+  status_id integer [not null]
+  serial_number varchar [unique]
 }
 
-Table RoomEquipment {
-  id integer [primary key, increment]
+Table equipment_status {
+  id integer [primary key]
+  status varchar [not null, note: 'Maintained, Broken, In-Repair']
+}
+
+Table room_equipment {
   room_id integer [not null]
-  equipment_id integer [not null]
+  equipment_item_id integer [not null]
 
   indexes {
-    (room_id, equipment_id) [unique]  // Унікальна комбінація
+    (room_id, equipment_item_id) [pk]
   }
 }
 
 
-Table CleaningSchedule {
+Table cleaning_schedule {
   id integer [primary key]
   room_id integer [not null]
   cleaner_id integer [not null]
   status varchar [not null, note: 'Scheduled, In Progress, Completed', default: 'Scheduled']
   cleaning_date datetime [not null]
-  duration integer [not null]
-  duration_unit varchar [default: 'minutes']
+  duration integer [not null, note: 'In minutes']
 }
 
-Table MaintenanceSchedule {
+Table maintenance_schedule {
   id integer [primary key]
   maintainer_id integer [not null]
-  equipment_id integer [not null]
+  equipment_item_id integer [not null]
   status varchar [not null, note: 'Scheduled, In Progress, Completed', default: 'Scheduled']
   maintenance_date datetime [not null]
-  duration integer [not null]
-  duration_unit varchar [default: 'minutes']
+  duration integer [not null, note: 'In minutes']
 }
 
 
-Ref: FitnessRoom.floor_number > FitnessFloor.floor_number
-Ref: RoomEquipment.room_id > FitnessRoom.room_id
-Ref: RoomEquipment.equipment_id > Equipment.id
-Ref: CleaningSchedule.room_id > FitnessRoom.room_id
-Ref: Equipment.status_id > EquipmentStatus.id
-Ref: MaintenanceSchedule.equipment_id > Equipment.id
+Ref: fitness_room.floor_number > fitness_floor.floor_number
+Ref: room_equipment.room_id > fitness_room.room_id
+Ref: room_equipment.equipment_item_id > equipment_item.id
+Ref: cleaning_schedule.room_id > fitness_room.room_id
+Ref: equipment_item.equipment_id > equipment.id
+Ref: equipment_item.status_id > equipment_status.id
+Ref: maintenance_schedule.equipment_item_id > equipment_item.id
 
 //-- End of Vladyslav Tupikin
