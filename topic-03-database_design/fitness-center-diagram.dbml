@@ -185,7 +185,6 @@ Table class_schedule {
 }
 
 Table class_registrations {
-  id integer [primary key, increment]
   schedule_id integer [not null]
   member_id integer [not null]
 
@@ -214,7 +213,7 @@ Table fitness_floor {
 
 Table fitness_room {
   room_id integer [primary key]
-  floor_number integer [not null, unique]
+  floor_number integer [not null]
   room_name varchar [not null, note: 'Studio A, Studio B, Main Gym']
   room_type varchar [not null, note: 'Yoga, Gym, Pool, Spinning']
   door_number integer [not null, unique]
