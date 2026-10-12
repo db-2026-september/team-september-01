@@ -5,12 +5,12 @@ CREATE TYPE class_level_enum AS ENUM ('Beginner', 'Intermediate', 'Advanced');
 CREATE TYPE training_status_enum AS ENUM ('Scheduled', 'In Progress', 'Completed', 'Cancelled');
 
 -- Tables
-CREATE TABLE specialization (
+CREATE TABLE public.specialization (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(10) NOT NULL UNIQUE
 );
 
-CREATE TABLE trainer_specialization (
+CREATE TABLE public.trainer_specialization (
     trainer_id INTEGER NOT NULL,
     specialization_id INTEGER NOT NULL,
     certification_date DATE NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE trainer_specialization (
     PRIMARY KEY (trainer_id, specialization_id)
 );
 
-CREATE TABLE trainer (
+CREATE TABLE public.trainer (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE trainer (
     status trainer_status_enum NOT NULL DEFAULT 'Active'
 );
 
-CREATE TABLE trainer_availability (
+CREATE TABLE public.trainer_availability (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     trainer_id INTEGER NOT NULL,
     availability_date DATE NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE trainer_availability (
     end_time TIME NOT NULL
 );
 
-CREATE TABLE class (
+CREATE TABLE public.class (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     class_name VARCHAR(10) NOT NULL,
     description VARCHAR(30),
@@ -45,7 +45,7 @@ CREATE TABLE class (
     duration INTEGER NOT NULL
 );
 
-CREATE TABLE trainer_class (
+CREATE TABLE public.trainer_class (
     trainer_id INTEGER NOT NULL,
     class_id INTEGER NOT NULL,
     assigned_date DATE NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE trainer_class (
     PRIMARY KEY (trainer_id, class_id)
 );
 
-CREATE TABLE personal_training (
+CREATE TABLE public.personal_training (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     trainer_id INTEGER NOT NULL,
     member_id INTEGER NOT NULL,
